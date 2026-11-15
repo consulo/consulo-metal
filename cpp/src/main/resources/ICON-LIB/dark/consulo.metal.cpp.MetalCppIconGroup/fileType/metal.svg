@@ -1,0 +1,6 @@
+<!-- The C-family file icon of IntelliJ Platform with the Metal icon of AppCode (AppcodeIcons/icons/expui/metal.svg) inside, in IntelliJ's blue; both Apache 2.0 -->
+<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<path d="M14.5 5.16065V10.8394C14.5 11.3776 14.2116 11.8747 13.7442 12.1417L8.74421 14.9989C8.28306 15.2624 7.71694 15.2624 7.25579 14.9989L2.25579 12.1417C1.78843 11.8747 1.5 11.3776 1.5 10.8394V5.16065C1.5 4.62236 1.78843 4.12534 2.25579 3.85828L7.25579 1.00114C7.71694 0.737624 8.28306 0.737624 8.74421 1.00114L13.7442 3.85828C14.2116 4.12534 14.5 4.62236 14.5 5.16065Z"
+		  fill="#25324D" stroke="#548AF7"/>
+	<path transform="translate(3.75 4) scale(0.5)" d="M6.5 8.59375L1 2V14H3V7.21277L8.5 14V9L13.5 14H16L6.5 4.5V8.59375Z" fill="#548AF7"/>
+</svg>

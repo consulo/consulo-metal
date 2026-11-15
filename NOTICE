@@ -1,0 +1,13 @@
+consulo-metal
+Copyright 2013-2026 consulo.io
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+examples/simple_kernel.metal comes from gpu-dev-accelerator-ultimate
+(https://github.com/JirakJ/gpu-dev-accelerator-ultimate), Copyright 2026 Jakub Jirák,
+licensed under the Apache License, Version 2.0.
+
+cpp/src/main/resources/ICON-LIB/*/consulo.metal.cpp.MetalCppIconGroup/fileType/metal.svg combines the C-family
+file icon of IntelliJ Platform (https://github.com/JetBrains/intellij-community) with the Metal icon of AppCode
+(AppcodeIcons/icons/expui/metal.svg, https://intellij-icons.jetbrains.design), Copyright JetBrains s.r.o.,
+licensed under the Apache License, Version 2.0, recoloured.

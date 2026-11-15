@@ -1,0 +1,134 @@
+// Copyright 2013-2026 consulo.io
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+// The built-in types of Metal as the editor sees it: declarations written from the Metal Shading Language
+// Specification. The Metal compiler knows these types without any header, so this file is included before the first
+// line of every .metal file. Vectors are structs with their single-component members; swizzles of several components
+// (v.xyz) are not declared.
+
+#ifndef CONSULO_METAL_TYPES
+#define CONSULO_METAL_TYPES
+
+// Scalar, vector and matrix types are global, as in Metal; namespace metal holds the templates and the library.
+
+// Scalars (spec 2.1). half and bfloat are built in to the Metal compiler; float stands in for them here.
+typedef float half;
+typedef float bfloat;
+typedef unsigned char uchar;
+typedef unsigned short ushort;
+typedef unsigned int uint;
+typedef unsigned long ulong;
+typedef decltype(sizeof(0)) size_t;
+typedef long ptrdiff_t;
+
+namespace metal {
+
+// Vectors (spec 2.2)
+template <typename T, int N>
+struct vec {
+    T x, y, z, w;
+    T r, g, b, a;
+
+    vec();
+    template <typename... Args>
+    vec(Args... args);
+
+    T& operator[](int index);
+};
+
+// Matrices (spec 2.3): Cols columns of Rows components each
+template <typename T, int Cols, int Rows>
+struct matrix {
+    vec<T, Rows> columns[Cols];
+
+    matrix();
+    template <typename... Args>
+    matrix(Args... args);
+
+    vec<T, Rows>& operator[](int column);
+};
+
+}
+
+typedef metal::vec<bool, 2> bool2;
+typedef metal::vec<bool, 3> bool3;
+typedef metal::vec<bool, 4> bool4;
+typedef metal::vec<char, 2> char2;
+typedef metal::vec<char, 3> char3;
+typedef metal::vec<char, 4> char4;
+typedef metal::vec<uchar, 2> uchar2;
+typedef metal::vec<uchar, 3> uchar3;
+typedef metal::vec<uchar, 4> uchar4;
+typedef metal::vec<short, 2> short2;
+typedef metal::vec<short, 3> short3;
+typedef metal::vec<short, 4> short4;
+typedef metal::vec<ushort, 2> ushort2;
+typedef metal::vec<ushort, 3> ushort3;
+typedef metal::vec<ushort, 4> ushort4;
+typedef metal::vec<int, 2> int2;
+typedef metal::vec<int, 3> int3;
+typedef metal::vec<int, 4> int4;
+typedef metal::vec<uint, 2> uint2;
+typedef metal::vec<uint, 3> uint3;
+typedef metal::vec<uint, 4> uint4;
+typedef metal::vec<long, 2> long2;
+typedef metal::vec<long, 3> long3;
+typedef metal::vec<long, 4> long4;
+typedef metal::vec<ulong, 2> ulong2;
+typedef metal::vec<ulong, 3> ulong3;
+typedef metal::vec<ulong, 4> ulong4;
+typedef metal::vec<half, 2> half2;
+typedef metal::vec<half, 3> half3;
+typedef metal::vec<half, 4> half4;
+typedef metal::vec<bfloat, 2> bfloat2;
+typedef metal::vec<bfloat, 3> bfloat3;
+typedef metal::vec<bfloat, 4> bfloat4;
+typedef metal::vec<float, 2> float2;
+typedef metal::vec<float, 3> float3;
+typedef metal::vec<float, 4> float4;
+
+// Packed vectors (spec 2.2.3)
+typedef metal::vec<float, 2> packed_float2;
+typedef metal::vec<float, 3> packed_float3;
+typedef metal::vec<float, 4> packed_float4;
+typedef metal::vec<half, 2> packed_half2;
+typedef metal::vec<half, 3> packed_half3;
+typedef metal::vec<half, 4> packed_half4;
+typedef metal::vec<int, 2> packed_int2;
+typedef metal::vec<int, 3> packed_int3;
+typedef metal::vec<int, 4> packed_int4;
+typedef metal::vec<uint, 2> packed_uint2;
+typedef metal::vec<uint, 3> packed_uint3;
+typedef metal::vec<uint, 4> packed_uint4;
+
+typedef metal::matrix<half, 2, 2> half2x2;
+typedef metal::matrix<half, 2, 3> half2x3;
+typedef metal::matrix<half, 2, 4> half2x4;
+typedef metal::matrix<half, 3, 2> half3x2;
+typedef metal::matrix<half, 3, 3> half3x3;
+typedef metal::matrix<half, 3, 4> half3x4;
+typedef metal::matrix<half, 4, 2> half4x2;
+typedef metal::matrix<half, 4, 3> half4x3;
+typedef metal::matrix<half, 4, 4> half4x4;
+typedef metal::matrix<float, 2, 2> float2x2;
+typedef metal::matrix<float, 2, 3> float2x3;
+typedef metal::matrix<float, 2, 4> float2x4;
+typedef metal::matrix<float, 3, 2> float3x2;
+typedef metal::matrix<float, 3, 3> float3x3;
+typedef metal::matrix<float, 3, 4> float3x4;
+typedef metal::matrix<float, 4, 2> float4x2;
+typedef metal::matrix<float, 4, 3> float4x3;
+typedef metal::matrix<float, 4, 4> float4x4;
+
+#endif

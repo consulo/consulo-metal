@@ -1,0 +1,10 @@
+<consulo-plugin url="https://github.com/consulo/consulo-metal">
+    <id>consulo.metal</id>
+    <name>Metal</name>
+    <depends>consulo.cpp</depends>
+    <description>Metal Shading Language: .metal files of the C/C++ plugin, with the address spaces, function qualifiers and standard library of Metal.</description>
+
+    <tags>
+        <tag>custom.language</tag>
+    </tags>
+</consulo-plugin>

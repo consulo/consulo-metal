@@ -1,0 +1,284 @@
+// Copyright 2013-2026 consulo.io
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+// The Metal standard library as the editor sees it: declarations written from the Metal Shading Language
+// Specification, for completion and resolve. Not Apple's headers, and not how the compiler implements the library.
+// The built-in types are in metal_types.
+
+#ifndef CONSULO_METAL_STDLIB
+#define CONSULO_METAL_STDLIB
+
+#include <metal_types>
+
+namespace metal {
+
+// Samplers (spec 2.10)
+enum class coord { normalized, pixel };
+enum class filter { nearest, linear, bicubic };
+enum class min_filter { nearest, linear, bicubic };
+enum class mag_filter { nearest, linear, bicubic };
+enum class mip_filter { none, nearest, linear };
+enum class s_address { clamp_to_zero, clamp_to_edge, clamp_to_border, repeat, mirrored_repeat };
+enum class t_address { clamp_to_zero, clamp_to_edge, clamp_to_border, repeat, mirrored_repeat };
+enum class r_address { clamp_to_zero, clamp_to_edge, clamp_to_border, repeat, mirrored_repeat };
+enum class address { clamp_to_zero, clamp_to_edge, clamp_to_border, repeat, mirrored_repeat };
+enum class border_color { transparent_black, opaque_black, opaque_white };
+enum class compare_func { none, less, less_equal, greater, greater_equal, equal, not_equal, always, never };
+
+struct sampler {
+    sampler();
+    template <typename... Args>
+    constexpr sampler(Args... args);
+};
+
+// Textures (spec 2.9)
+enum class access { sample, read, write, read_write };
+
+struct level {
+    level(uint lod);
+};
+
+struct bias {
+    bias(float value);
+};
+
+template <typename T, access A = access::sample>
+struct texture1d {
+    vec<T, 4> sample(sampler s, float coord) const;
+    vec<T, 4> read(uint coord, uint lod = 0) const;
+    void write(vec<T, 4> color, uint coord, uint lod = 0);
+    uint get_width(uint lod = 0) const;
+};
+
+template <typename T, access A = access::sample>
+struct texture2d {
+    vec<T, 4> sample(sampler s, float2 coord) const;
+    vec<T, 4> sample(sampler s, float2 coord, level lod) const;
+    vec<T, 4> sample(sampler s, float2 coord, bias b) const;
+    vec<T, 4> read(uint2 coord, uint lod = 0) const;
+    void write(vec<T, 4> color, uint2 coord, uint lod = 0);
+    vec<T, 4> gather(sampler s, float2 coord) const;
+    uint get_width(uint lod = 0) const;
+    uint get_height(uint lod = 0) const;
+    uint get_num_mip_levels() const;
+};
+
+template <typename T, access A = access::sample>
+struct texture2d_array {
+    vec<T, 4> sample(sampler s, float2 coord, uint array) const;
+    vec<T, 4> read(uint2 coord, uint array, uint lod = 0) const;
+    void write(vec<T, 4> color, uint2 coord, uint array, uint lod = 0);
+    uint get_width(uint lod = 0) const;
+    uint get_height(uint lod = 0) const;
+    uint get_array_size() const;
+};
+
+template <typename T, access A = access::sample>
+struct texture3d {
+    vec<T, 4> sample(sampler s, float3 coord) const;
+    vec<T, 4> read(uint3 coord, uint lod = 0) const;
+    void write(vec<T, 4> color, uint3 coord, uint lod = 0);
+    uint get_width(uint lod = 0) const;
+    uint get_height(uint lod = 0) const;
+    uint get_depth(uint lod = 0) const;
+};
+
+template <typename T, access A = access::sample>
+struct texturecube {
+    vec<T, 4> sample(sampler s, float3 coord) const;
+    vec<T, 4> read(uint2 coord, uint face, uint lod = 0) const;
+    uint get_width(uint lod = 0) const;
+    uint get_height(uint lod = 0) const;
+};
+
+template <typename T, access A = access::sample>
+struct depth2d {
+    T sample(sampler s, float2 coord) const;
+    T sample_compare(sampler s, float2 coord, float compare_value) const;
+    T read(uint2 coord, uint lod = 0) const;
+    uint get_width(uint lod = 0) const;
+    uint get_height(uint lod = 0) const;
+};
+
+// Math functions (spec 6.5), for scalars and vectors alike
+template <typename T> T abs(T x);
+template <typename T> T min(T x, T y);
+template <typename T> T max(T x, T y);
+template <typename T> T clamp(T x, T minval, T maxval);
+template <typename T> T saturate(T x);
+template <typename T> T sign(T x);
+template <typename T> T sqrt(T x);
+template <typename T> T rsqrt(T x);
+template <typename T> T pow(T x, T y);
+template <typename T> T powr(T x, T y);
+template <typename T> T exp(T x);
+template <typename T> T exp2(T x);
+template <typename T> T exp10(T x);
+template <typename T> T log(T x);
+template <typename T> T log2(T x);
+template <typename T> T log10(T x);
+template <typename T> T sin(T x);
+template <typename T> T cos(T x);
+template <typename T> T tan(T x);
+template <typename T> T asin(T x);
+template <typename T> T acos(T x);
+template <typename T> T atan(T x);
+template <typename T> T atan2(T y, T x);
+template <typename T> T sinh(T x);
+template <typename T> T cosh(T x);
+template <typename T> T tanh(T x);
+template <typename T> T floor(T x);
+template <typename T> T ceil(T x);
+template <typename T> T round(T x);
+template <typename T> T rint(T x);
+template <typename T> T trunc(T x);
+template <typename T> T fract(T x);
+template <typename T> T fmod(T x, T y);
+template <typename T> T fma(T a, T b, T c);
+template <typename T> T fmin(T x, T y);
+template <typename T> T fmax(T x, T y);
+template <typename T> T copysign(T x, T y);
+template <typename T> bool isnan(T x);
+template <typename T> bool isinf(T x);
+template <typename T> bool isfinite(T x);
+
+// Common functions (spec 6.4)
+template <typename T> T mix(T x, T y, T a);
+template <typename T> T step(T edge, T x);
+template <typename T> T smoothstep(T edge0, T edge1, T x);
+
+// Geometric functions (spec 6.6)
+template <typename T, int N> T dot(vec<T, N> x, vec<T, N> y);
+template <typename T> vec<T, 3> cross(vec<T, 3> x, vec<T, 3> y);
+template <typename T, int N> T length(vec<T, N> x);
+template <typename T, int N> T length_squared(vec<T, N> x);
+template <typename T, int N> T distance(vec<T, N> x, vec<T, N> y);
+template <typename T, int N> T distance_squared(vec<T, N> x, vec<T, N> y);
+template <typename T, int N> vec<T, N> normalize(vec<T, N> x);
+template <typename T, int N> vec<T, N> reflect(vec<T, N> i, vec<T, N> n);
+template <typename T, int N> vec<T, N> refract(vec<T, N> i, vec<T, N> n, T eta);
+template <typename T, int N> vec<T, N> faceforward(vec<T, N> n, vec<T, N> i, vec<T, N> nref);
+
+// Relational functions (spec 6.3)
+template <typename T> bool all(T x);
+template <typename T> bool any(T x);
+template <typename T> T select(T a, T b, bool c);
+
+// Matrix functions (spec 6.7)
+template <typename T, int N> T determinant(matrix<T, N, N> m);
+template <typename T, int C, int R> matrix<T, R, C> transpose(matrix<T, C, R> m);
+
+// Integer functions (spec 6.8)
+template <typename T> T popcount(T x);
+template <typename T> T clz(T x);
+template <typename T> T ctz(T x);
+template <typename T> T mulhi(T x, T y);
+template <typename T> T absdiff(T x, T y);
+template <typename T> T extract_bits(T x, uint offset, uint bits);
+template <typename T> T insert_bits(T base, T insert, uint offset, uint bits);
+template <typename T> T reverse_bits(T x);
+
+// Pack and unpack (spec 6.14)
+uint pack_float_to_unorm4x8(float4 x);
+uint pack_float_to_snorm4x8(float4 x);
+float4 unpack_unorm4x8_to_float(uint x);
+float4 unpack_snorm4x8_to_float(uint x);
+
+// Synchronization (spec 6.9)
+enum class mem_flags { mem_none, mem_device, mem_threadgroup, mem_texture, mem_threadgroup_imageblock, mem_object_data };
+void threadgroup_barrier(mem_flags flags);
+void simdgroup_barrier(mem_flags flags);
+
+// Atomics (spec 6.15)
+enum memory_order { memory_order_relaxed, memory_order_seq_cst };
+
+template <typename T>
+struct _atomic {
+    T load(memory_order order = memory_order_relaxed) const;
+    void store(T value, memory_order order = memory_order_relaxed);
+};
+
+typedef _atomic<int> atomic_int;
+typedef _atomic<uint> atomic_uint;
+typedef _atomic<bool> atomic_bool;
+typedef _atomic<float> atomic_float;
+
+template <typename T> T atomic_load_explicit(const _atomic<T>* object, memory_order order);
+template <typename T> void atomic_store_explicit(_atomic<T>* object, T desired, memory_order order);
+template <typename T> T atomic_exchange_explicit(_atomic<T>* object, T desired, memory_order order);
+template <typename T> bool atomic_compare_exchange_weak_explicit(_atomic<T>* object, T* expected, T desired, memory_order success, memory_order failure);
+template <typename T> T atomic_fetch_add_explicit(_atomic<T>* object, T operand, memory_order order);
+template <typename T> T atomic_fetch_sub_explicit(_atomic<T>* object, T operand, memory_order order);
+template <typename T> T atomic_fetch_and_explicit(_atomic<T>* object, T operand, memory_order order);
+template <typename T> T atomic_fetch_or_explicit(_atomic<T>* object, T operand, memory_order order);
+template <typename T> T atomic_fetch_xor_explicit(_atomic<T>* object, T operand, memory_order order);
+template <typename T> T atomic_fetch_min_explicit(_atomic<T>* object, T operand, memory_order order);
+template <typename T> T atomic_fetch_max_explicit(_atomic<T>* object, T operand, memory_order order);
+
+// SIMD-group functions (spec 6.10)
+struct simd_vote {
+    bool all() const;
+    bool any() const;
+};
+
+template <typename T> T simd_sum(T data);
+template <typename T> T simd_product(T data);
+template <typename T> T simd_min(T data);
+template <typename T> T simd_max(T data);
+template <typename T> T simd_prefix_inclusive_sum(T data);
+template <typename T> T simd_prefix_exclusive_sum(T data);
+template <typename T> T simd_broadcast(T data, ushort lane);
+template <typename T> T simd_broadcast_first(T data);
+template <typename T> T simd_shuffle(T data, ushort lane);
+template <typename T> T simd_shuffle_down(T data, ushort delta);
+template <typename T> T simd_shuffle_up(T data, ushort delta);
+template <typename T> T simd_shuffle_xor(T data, ushort mask);
+simd_vote simd_ballot(bool expr);
+bool simd_all(bool expr);
+bool simd_any(bool expr);
+bool simd_is_first();
+
+// Fragment functions (spec 6.11)
+void discard_fragment();
+template <typename T> T dfdx(T p);
+template <typename T> T dfdy(T p);
+template <typename T> T fwidth(T p);
+
+namespace fast {
+template <typename T> T sqrt(T x);
+template <typename T> T rsqrt(T x);
+template <typename T> T pow(T x, T y);
+template <typename T> T exp(T x);
+template <typename T> T log(T x);
+template <typename T> T sin(T x);
+template <typename T> T cos(T x);
+template <typename T> T normalize(T x);
+template <typename T> T length(T x);
+}
+
+namespace precise {
+template <typename T> T sqrt(T x);
+template <typename T> T rsqrt(T x);
+template <typename T> T pow(T x, T y);
+template <typename T> T exp(T x);
+template <typename T> T log(T x);
+template <typename T> T sin(T x);
+template <typename T> T cos(T x);
+template <typename T> T normalize(T x);
+template <typename T> T length(T x);
+}
+
+}
+
+#endif
