@@ -130,7 +130,7 @@ public class MetalParsingTest extends SimpleParsingTest<Object> {
         String name = testName(context);
         String bundled = BUNDLED.get(name);
         String path = bundled != null
-            ? "/consulo/metal/cpp/include/" + bundled
+            ? "/consulo/metal/cpp/headers/" + bundled
             : "/parsing/metal/" + name.replace("Metal3", "").replace("PlainCpp", "") + "." + extension;
         InputStream stream = getClass().getResourceAsStream(path);
         Assertions.assertNotNull(stream, path);

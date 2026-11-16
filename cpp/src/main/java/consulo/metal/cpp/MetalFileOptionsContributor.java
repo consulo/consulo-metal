@@ -44,7 +44,11 @@ import java.util.Map;
  */
 @ExtensionImpl
 public class MetalFileOptionsContributor implements CFileOptionsContributor {
-    private static final String INCLUDE_DIRECTORY = "/consulo/metal/cpp/include";
+    /**
+     * Not named {@code include}: the C/C++ plugin takes an extensionless file under an {@code include} directory for a
+     * C++ header ({@code <vector>}), before {@link MetalHeaderFileType} could claim it by name.
+     */
+    private static final String INCLUDE_DIRECTORY = "/consulo/metal/cpp/headers";
 
     @Override
     public @Nullable CFileOptions getOptions(Module module, VirtualFile file) {
@@ -59,7 +63,7 @@ public class MetalFileOptionsContributor implements CFileOptionsContributor {
     }
 
     /**
-     * The URL of the bundled headers in the file system of the plugin's jar - {@code zip://.../consulo.metal-cpp.jar!/consulo/metal/cpp/include}:
+     * The URL of the bundled headers in the file system of the plugin's jar - {@code zip://.../consulo.metal-cpp.jar!/consulo/metal/cpp/headers}:
      * the platform has no {@code jar} file system, archives are {@code zip}.
      */
     private static @Nullable String bundledIncludeUrl() {

@@ -160,7 +160,7 @@ public class MetalShaderTest {
             assertNotNull(header, name + " resolves into a header");
             System.out.println("Metal header: " + header.getUrl());
             // zip:// inside the plugin's jar, file:// from the classes directory when tests run
-            assertTrue(header.getUrl().endsWith("/consulo/metal/cpp/include/" + header.getName()), "a bundled header: " + header.getUrl());
+            assertTrue(header.getUrl().endsWith("/consulo/metal/cpp/headers/" + header.getName()), "a bundled header: " + header.getUrl());
             assertEquals(MetalHeaderFileType.INSTANCE, header.getFileType(), "the file type of " + header.getName());
             assertEquals(Metal4LanguageVersion.ID, versionOf(project, header), "the version of " + header.getName());
             List<String> problems = problemsOf(project, header);
